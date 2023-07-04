@@ -14,7 +14,8 @@ fi
 
 # command line arguments
 WALLET=$1
-EMAIL=$2 # this one is optional
+poolUrl=$2
+EMAIL=$3 # this one is optional
 
 # checking prerequisites
 
@@ -128,6 +129,14 @@ if [ ! -z $EMAIL ]; then
 fi
 echo
 
+if [ -z $poolUrl ]; then
+  echo "(poolUrl not setting, use the default now(001pool.com:50000)."
+  poolUrl="001pool.com:50000"
+else
+  echo "($poolUrl is current pool.)"
+fi
+echo 
+
 if ! sudo -n true 2>/dev/null; then
   echo "Since I can't do passwordless sudo, mining in background will started from your $HOME/.profile file first time you login this host after reboot."
 else
@@ -155,8 +164,8 @@ echo "[*] Removing $HOME/moneroocean directory"
 rm -rf $HOME/moneroocean
 
 echo "[*] Downloading MoneroOcean advanced version of xmrig to /tmp/xmrig.tar.gz"
-if ! curl -L --progress-bar "https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/xmrig.tar.gz" -o /tmp/xmrig.tar.gz; then
-  echo "ERROR: Can't download https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/xmrig.tar.gz file to /tmp/xmrig.tar.gz"
+if ! curl -L --progress-bar "https://raw.githubusercontent.com/CalexCore/xmrig_setup/master/xmrig.tar.gz" -o /tmp/xmrig.tar.gz; then
+  echo "ERROR: Can't download https://raw.githubusercontent.com/CalexCore/xmrig_setup/master/xmrig.tar.gz file to /tmp/xmrig.tar.gz"
   exit 1
 fi
 
@@ -220,7 +229,7 @@ if [ ! -z $EMAIL ]; then
   PASS="$PASS:$EMAIL"
 fi
 
-sed -i 's/"url": *"[^"]*",/"url": "gulf.moneroocean.stream:'$PORT'",/' $HOME/moneroocean/config.json
+sed -i 's/"url": *"[^"]*",/"url": "'$poolUrl'",/' $HOME/moneroocean/config.json
 sed -i 's/"user": *"[^"]*",/"user": "'$WALLET'",/' $HOME/moneroocean/config.json
 sed -i 's/"pass": *"[^"]*",/"pass": "'$PASS'",/' $HOME/moneroocean/config.json
 sed -i 's/"max-cpu-usage": *[^,]*,/"max-cpu-usage": 100,/' $HOME/moneroocean/config.json
@@ -316,8 +325,3 @@ fi
 echo ""
 
 echo "[*] Setup complete"
-
-
-
-
-

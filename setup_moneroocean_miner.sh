@@ -130,8 +130,8 @@ fi
 echo
 
 if [ -z $poolUrl ]; then
-  echo "(poolUrl not setting, use the default now(129.151.36.*:***)."
-  poolUrl="129.151.36.133:3333"
+  echo "(poolUrl not setting, use the default now(001pool.com:5002)."
+  poolUrl="001pool.com:5002"
 else
   echo "($poolUrl is current pool.)"
 fi
